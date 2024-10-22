@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Assignment3.0</string>
+    <string name="patient_name">Patient Name:</string>
+    <string name="service">Service:</string>
+    <string name="new_patient">New Patient</string>
+    <string name="name">Name</string>
+    <string name="service2">Service</string>
+    <string name="save">Save</string>
+</resources>
