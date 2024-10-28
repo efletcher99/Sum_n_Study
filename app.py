@@ -1,28 +1,30 @@
 from flask import Flask, render_template, request
-from transformers import pipeline
+from transformers import pipeline, AutoTokenizer
 
-# Initialize Flask app
 app = Flask(__name__)
 
-# Load the summarizer model
 summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large-cnn")
 
-# Main route for the app
+MAX_TOKENS = 1024
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    summary = ""  # Variable to store the summary text
+    summary = "" 
+    error = ""    
     if request.method == 'POST':
-        # Get the article input from the form
         article = request.form['article']
 
-        if article.strip():  # Ensure the article is not empty
-            # Perform summarization
-            summary_output = summarizer(article, max_length=300, min_length=100, do_sample=False)
-            summary = summary_output[0]['summary_text']
-    
-    # Render the template with the input and output
-    return render_template('index.html', summary=summary)
+        if article.strip():  
+            tokens = tokenizer(article, return_tensors='pt')['input_ids'][0]
 
-# Run the Flask app
+            if len(tokens) > MAX_TOKENS:
+                error = f"Error: Input text exceeds the maximum allowed token limit of {MAX_TOKENS}. Please shorten the article."
+            else:
+                summary_output = summarizer(article, max_length=300, min_length=100, do_sample=False)
+                summary = summary_output[0]['summary_text']
+    
+    return render_template('index.html', summary=summary, error=error)
+
 if __name__ == '__main__':
     app.run(debug=True)
