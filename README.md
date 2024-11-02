@@ -12,7 +12,7 @@ In future updates, Sum n Study will allow users to generate quizzes based on the
 ## Development Setup
 1. Create virtual environment 'python3 -m venv .venv'
 2. Activate virual environment 'source .venv/bin/activate'
-4. Intstall necessary libraries 'pip install -r requirements.txt'
+3. Intstall necessary libraries 'pip install -r requirements.txt'
 
 ## Run the application
 1. Run 'python app.py'
